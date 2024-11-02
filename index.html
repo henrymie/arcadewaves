@@ -3,10 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>arcadewaves.games</title>
+    <title>arcadewaves.games | Henry M</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <style>
+            .footer {
+            text-align: center;
+            padding: 20px;
+            background: #0f0f0f;
+            margin-top: 40px;
+        }
+        
+        .footer a {
+            color: #ffd700;
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+        
+        .footer a:hover {
+            opacity: 0.8;
+        }
         body {
             background: #1a1a1a;
             color: white;
@@ -168,7 +185,7 @@
 
             .games-grid {
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 15px;
+                gap: 15px;                
             }
         }
     </style>
@@ -376,5 +393,8 @@
         renderCategories();
         renderGames();
     </script>
+    <footer class="footer">
+        <a href="https://github.com/henrymie" target="_blank">© 2024 Arcade Games</a>
+    </footer>    
 </body>
 </html>
