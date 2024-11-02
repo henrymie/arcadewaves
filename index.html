@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>arcadewaves.games</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        header {
+            padding: 20px;
+            background: #0f0f0f;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            text-transform: lowercase;
+        }
+        
+        .search-container {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px 15px;
+            padding-right: 40px;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+            background: #2a2a2a;
+            color: white;
+            font-size: 15px;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .categories {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: #2a2a2a;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .category-btn:hover {
+            background: #3a3a3a;
+            transform: translateY(-1px);
+        }
+
+        .category-btn.active {
+            background: #ffd700;
+            color: #000;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        
+        .game-card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .game-icon {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            background: linear-gradient(45deg, #3a3a3a, #2a2a2a);
+        }
+        
+        .game-title {
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            background: #2a2a2a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-top">
+                <div class="logo">arcadewaves.games</div>
+                <div class="search-container">
+                    <input type="text" class="search-bar" placeholder="Search games...">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+            </div>
+            <div class="categories" id="categoriesContainer"></div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="games-grid" id="gamesContainer"></div>
+    </main>
+
+    <script>
+        const games = [
+            { title: "Only Up Ball", icon: "#", url: "/a", category: "Parkour" },
+            { title: "Minecraft Parkour", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/9ecda005-11e9-4b52-ab9e-700b4d46d00f%2Fminep.xml&container=ig", category: "Parkour" },
+            { title: "Stack Bounce", icon: "", url: "https://stackbounce.h5games.usercontent.goog/v/1aqsvv0aegbjg/?origin=https%3A%2F%2Fgamesnacks.com&gameCenterId=yt&userActivityMetrics=true&eids=95340509&features=InterstitialFreqCap__freq_cap_60s%2CInterstitialFreqCap__block_pga_1m_interstitials%2CMonetization__populate_google_global_correlator%2CMonetization__use_ppabg_tag", category: "Strategy" },
+            { title: "Johnny Trigger", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/yrgen73/Jtrigger@3d4eb8d328bab8af057daa77acd4cee7608f1ec1/jt.xml&container=ig", category: "Strategy" },
+            { title: "Basketball Legends", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@5ebf5ebca88beaad3f3e9dcf461e25778c2a1a56/build/bl20/bl2020.xml&container=ig", category: "Strategy" }, 
+            { title: "OvO", icon: "", url: "https://75jfh73gd9hla64g-opensocial.googleusercontent.com/gadgets/ifr?url=https://googleusercontent.b-cdn.net/ovo/ovo.xml&container=ig", category: "Strategy" },      
+            { title: "Snow Rider 3D", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/mind4ur/debugactions@6e97a528bfcdd0623e0cd99ad352baebf47a6b70/sr3d2.xml&container=ig", category: "Strategy" },  
+            { title: "Gun Spin", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/RobiFet/workflow@60b41ef8c9123ae41b86bf04c9b39e1a5713aaa9/bin/gs.xml&container=ig", category: "Shooter" },    
+            { title: "Time Shooter 2", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/ts2x.xml&container=ig", category: "Shooter" },      
+            { title: "Time Shooter 3", icon: "", url: "https://google-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@0d8fb9c7430567ed0900902593eee6ba2ba8d297/ts3.xml&container=ig", category: "Shooter" },  
+            { title: "Basket Random", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/newgoogletrendd.xml&container=ig", category: "Strategy" },  
+            { title: "Rooftop Snipers", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@f8de953e5d955baef80e3994a1105d74ad76315b/Rooftop-Snipers.xml&container=ig", category: "Shooter" },  
+            { title: "Temple Run", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bessiegasbarro/Temp@8b49fbc206a1a207d613b8ca4d4f0b767159657d/tr.xml&container=ig", category: "Strategy" },    
+            { title: "Hole.io", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/gertdoro/Toolkit@93a27eabbbe5eb626af5b9b7dd0926ac16810a41/Code/Java/hole.xml&container=ig", category: "Strategy" },  
+            { title: "Snake", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://26515722-282596139816136697.preview.editmysite.com/uploads/b/7547235-562404422326578714/files/sis.xml&container=ig", category: "Strategy" }, 
+            { title: "Getaway Shootout", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@e14f9d7fa2d076a4845a22c5b0e566f7cfd0ac4b/Getaway-Shootout.xml&container=ig", category: "Shooter" }, 
+            { title: "Funny Shooter 2", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/wergboy/Meteor@8f6f4282e1304fa03b4ea2cdb326184b11655a90/examples/react-in-blaze/fs2.xml&container=ig", category: "Shooter" },     
+            { title: "Helix Jump", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/h4643.xml&container=ig", category: "Strategy" },   
+            { title: "Vex 5", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@dae52f4583f3cc7612451ea7f02965aeff6077bf/build/v5/v5.xml&container=ig", category: "Strategy" }, 
+            { title: "Stick Archers Battle", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://39574824-594760418439461653.preview.editmysite.com/uploads/b/139890129-634516224366849044/files/sab.xml&container=ig", category: "Strategy" },     
+            { title: "Cookie Clicker", icon: "", url: "https://google-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@0d9afabd2522344a702e1b692ad58039f6290b0d/build/c-c/cc.xml&container=ig", category: "Strategy" },    
+            { title: "Epic Stunt Cars", icon: "#", url: "/d", category: "Driving" },
+            { title: "Tap Tap Shots", icon: "#", url: "/e", category: "Strategy" },            
+        ];
+
+        const categories = ['all', ...new Set(games.map(game => game.category))];
+        let activeCategory = 'all';
+        let searchTerm = '';
+
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = categories.map(category => `
+                <button class="category-btn ${category === activeCategory ? 'active' : ''}"
+                        onclick="filterByCategory('${category}')">
+                    ${category.charAt(0).toUpperCase() + category.slice(1)}
+                </button>
+            `).join('');
+        }
+
+        function filterGames() {
+            return games.filter(game => {
+                const matchesCategory = activeCategory === 'all' || game.category === activeCategory;
+                const matchesSearch = game.title.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+        }
+
+        function renderGames() {
+            const container = document.getElementById('gamesContainer');
+            const filteredGames = filterGames();
+            container.innerHTML = filteredGames.map(game => `
+                <div class="game-card" onclick="window.location.href='${game.url}'">
+                    <div class="game-icon"></div>
+                    <div class="game-title">${game.title}</div>
+                </div>
+            `).join('');
+        }
+
+        function filterByCategory(category) {
+            activeCategory = category;
+            renderCategories();
+            renderGames();
+        }
+
+        document.querySelector('.search-bar').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderGames();
+        });
+
+        renderCategories();
+        renderGames();
+    </script>
+</body>
+</html>
