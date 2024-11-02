@@ -283,12 +283,15 @@
             { title: "Angry Birds", icon: "#", url: "/angrybirds", category: "Strategy" },
             { title: "Rocket League", icon: "#", url: "/Rocket-League", category: "Strategy" },
             { title: "Tactical Assasin 2", icon: "#", url: "/tacticalassasin2", category: "Strategy" },
-            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
-            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
-            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
-            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
-            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
-            
+            { title: "Space Waves", icon: "#", url: "https://crazygames.cdn.start.gg/9nm5764dbppg/v3/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Shoot The Bottle", icon: "#", url: "https://marketjs.cdn.start.gg/9pb62x276fpp/v4/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Shooter" },
+            { title: "Wild Hunting Clash", icon: "#", url: "https://inlogic.cdn.start.gg/9n292xr2128r/v3/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Shooter" },
+            { title: "Ball Drop", icon: "#", url: "https://marketjs.cdn.start.gg/9n5cr504q14r/v6/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Color Sort Puzzle", icon: "#", url: "https://inlogic.cdn.start.gg/9nk7ht6xf3hm/v1/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Drift Boss", icon: "#", url: "https://marketjs.cdn.start.gg/9p4mrh7g580x/v11/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Cubes 2048", icon: "#", url: "https://crazygames.cdn.start.gg/9mvd9sprhm6x/v67/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Snowdown Showdown", icon: "#", url: "https://educate.stemfuse.com/sf-serve/76/snowdown_showdown/index.html?class_id=&course_id=&active=", category: "Strategy" },
+            { title: "Elastic Man", icon: "#", url: "https://d21u3ic0kp9e91.cloudfront.net/elasticman/0/index.html", category: "Strategy" },
         ];
 
         const categories = ['all', ...new Set(games.map(game => game.category))];
@@ -350,17 +353,6 @@ function showGame(url) {
                 border: none;
                 display: block;
             }
-            .fullscreen {
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-                z-index: 9999 !important;
-                background: black;
-            }
             #Menu {
                 position: fixed;
                 bottom: 10px;
@@ -368,7 +360,7 @@ function showGame(url) {
                 background-color: rgba(29, 29, 29, 0.753);
                 border-radius: 15px;
                 padding: 5px;
-                z-index: 99999;
+                z-index: 9999;
                 user-select: none;
                 transition: opacity 0.3s;
             }
@@ -377,13 +369,14 @@ function showGame(url) {
                 transition: color 0.3s;
                 margin: 5px;
                 user-select: none;
-                cursor: default;
+                cursor: default !important;
                 -webkit-user-select: none;
                 -moz-user-select: none;
                 -ms-user-select: none;
             }
             .buttonForMenu:hover {
                 color: #9a9a9a;
+                cursor: default !important;
             }
             .hidden {
                 opacity: 0;
@@ -398,35 +391,37 @@ function showGame(url) {
             
             <div id="Menu">
                 <span class="material-icons buttonForMenu" onclick="location.reload()">arrow_back</span>
-                <span class="material-icons buttonForMenu" id="fullscreenBtn">fullscreen</span>
+                <span class="material-icons buttonForMenu" onclick="simulateF11()">fullscreen</span>
             </div>
 
             <script>
-                var isFullscreen = false;
-                var gameContainer = document.getElementById('gameContainer');
                 var game = document.getElementById('game');
                 var menu = document.getElementById('Menu');
-                var fullscreenBtn = document.getElementById('fullscreenBtn');
+                var isFullscreen = false;
 
-                fullscreenBtn.addEventListener('click', toggleFullscreen);
-
-                function toggleFullscreen() {
+                function simulateF11() {
+                    var event = new KeyboardEvent('keydown', {
+                        key: 'F11',
+                        keyCode: 122,
+                        which: 122,
+                        code: 'F11',
+                        bubbles: true
+                    });
+                    document.dispatchEvent(event);
+                    
                     if (!isFullscreen) {
-                        gameContainer.classList.add('fullscreen');
                         menu.classList.add('hidden');
                         isFullscreen = true;
-                        fullscreenBtn.textContent = 'fullscreen_exit';
                     } else {
-                        gameContainer.classList.remove('fullscreen');
                         menu.classList.remove('hidden');
                         isFullscreen = false;
-                        fullscreenBtn.textContent = 'fullscreen';
                     }
                 }
 
                 document.addEventListener('keyup', function(e) {
                     if (e.key === 'Escape' && isFullscreen) {
-                        toggleFullscreen();
+                        menu.classList.remove('hidden');
+                        isFullscreen = false;
                     }
                 });
 
