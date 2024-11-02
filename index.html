@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>arcadewaves.games</title>
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <style>
         body {
             background: #1a1a1a;
@@ -39,6 +40,7 @@
             font-weight: bold;
             color: #ffd700;
             text-transform: lowercase;
+            cursor: pointer;
         }
         
         .search-container {
@@ -142,6 +144,51 @@
             text-overflow: ellipsis;
         }
 
+        .game-view {
+            display: none;
+            width: 100%;
+            height: calc(100vh - 140px);
+            margin: 0 auto;
+        }
+
+        .game-frame {
+            width: 100%;
+            height: 100%;
+            background: #2a2a2a;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .game-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(42, 42, 42, 0.8);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: rgba(58, 58, 58, 0.8);
+        }
+
         @media (max-width: 768px) {
             .header-top {
                 flex-direction: column;
@@ -164,7 +211,7 @@
     <header>
         <div class="header-content">
             <div class="header-top">
-                <div class="logo">arcadewaves.games</div>
+                <div class="logo" onclick="showHome()">arcadewaves.games</div>
                 <div class="search-container">
                     <input type="text" class="search-bar" placeholder="Search games...">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -176,6 +223,13 @@
 
     <main class="main-content">
         <div class="games-grid" id="gamesContainer"></div>
+        <div class="game-view" id="gameView">
+            <div class="game-frame" id="gameFrame"></div>
+            <div class="game-controls">
+                <button class="control-btn" onclick="showHome()">Back</button>
+                <button class="control-btn" onclick="toggleFullscreen()">Fullscreen</button>
+            </div>
+        </div>
     </main>
 
     <script>
@@ -202,12 +256,45 @@
             { title: "Stick Archers Battle", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://39574824-594760418439461653.preview.editmysite.com/uploads/b/139890129-634516224366849044/files/sab.xml&container=ig", category: "Strategy" },     
             { title: "Cookie Clicker", icon: "", url: "https://google-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@0d9afabd2522344a702e1b692ad58039f6290b0d/build/c-c/cc.xml&container=ig", category: "Strategy" },    
             { title: "Epic Stunt Cars", icon: "#", url: "/d", category: "Driving" },
-            { title: "Tap Tap Shots", icon: "#", url: "/e", category: "Strategy" },            
+            { title: "Tap Tap Shots", icon: "#", url: "/e", category: "Strategy" },     
+            { title: "2048", icon: "#", url: "/2048", category: "Strategy" },   
+            { title: "Chrome Dino", icon: "#", url: "/chrome-dino", category: "Strategy" }, 
+            { title: "Doodle Jump", icon: "#", url: "/doodle-jump", category: "Strategy" },
+            { title: "FNAF 4", icon: "#", url: "/FNAF4", category: "Strategy" },
+            { title: "Fruit Ninja", icon: "#", url: "/fruitninja", category: "Strategy" },
+            { title: "Geometry Dash", icon: "#", url: "/geometry-dash", category: "Strategy" },
+            { title: "Jetpack Joyride", icon: "#", url: "/jetpack-joyride", category: "Strategy" },
+            { title: "Minecraft", icon: "#", url: "/minecraft-18", category: "Strategy" },
+            { title: "Moto X3M", icon: "#", url: "/Moto-X3M", category: "Strategy" },
+            { title: "Paper IO 2", icon: "#", url: "/paperio2", category: "Strategy" },
+            { title: "Slope", icon: "#", url: "/slope", category: "Strategy" },
+            { title: "Slope 2", icon: "#", url: "/slope-2", category: "Strategy" },
+            { title: "Soundboard", icon: "#", url: "/soundboard", category: "Strategy" },
+            { title: "Stack", icon: "#", url: "/stack", category: "Strategy" },
+            { title: "Stickman Hook", icon: "#", url: "/stickman-hook", category: "Strategy" },
+            { title: "Subway Surfers", icon: "#", url: "/subwaysurfers-sf", category: "Strategy" },
+            { title: "Temple Run 2", icon: "#", url: "/temple-run-2", category: "Strategy" },
+            { title: "Crossy Road", icon: "#", url: "/crossyroad", category: "Strategy" },
+            { title: "Cut The Rope", icon: "#", url: "/cuttherope-Timetravel", category: "Strategy" },
+            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
+            { title: "Bottle Flip 3D", icon: "#", url: "/bottle-flip-3d", category: "Strategy" },
+            { title: "Ball Hop", icon: "#", url: "/Ball-Hop", category: "Strategy" },
+            { title: "Backrooms", icon: "#", url: "/backrooms", category: "Strategy" },
+            { title: "Angry Birds", icon: "#", url: "/angrybirds", category: "Strategy" },
+            { title: "Rocket League", icon: "#", url: "/Rocket-League", category: "Strategy" },
+            { title: "Tactical Assasin 2", icon: "#", url: "/tacticalassasin2", category: "Strategy" },
+            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
+            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
+            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
+            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
+            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
+            
         ];
 
         const categories = ['all', ...new Set(games.map(game => game.category))];
         let activeCategory = 'all';
         let searchTerm = '';
+        let gameClicked = null;
 
         function renderCategories() {
             const container = document.getElementById('categoriesContainer');
@@ -231,11 +318,159 @@
             const container = document.getElementById('gamesContainer');
             const filteredGames = filterGames();
             container.innerHTML = filteredGames.map(game => `
-                <div class="game-card" onclick="window.location.href='${game.url}'">
+                <div class="game-card" onclick="showGame('${game.url}')">
                     <div class="game-icon"></div>
                     <div class="game-title">${game.title}</div>
                 </div>
             `).join('');
+        }
+
+function showGame(url) {
+    document.documentElement.innerHTML = `
+        <html><head>
+        <script src="https://unpkg.com/@ruffle-rs/ruffle"><\/script>
+        <title>Arcade - Game</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                margin: 0;
+                overflow: hidden;
+                background-color: rgb(117, 117, 117);
+            }
+            #gameContainer {
+                width: 100vw;
+                height: 100vh;
+                position: relative;
+            }
+            #game {
+                width: 100%;
+                height: 100%;
+                border: none;
+                display: block;
+            }
+            .fullscreen {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                max-width: 100% !important;
+                max-height: 100% !important;
+                z-index: 9999 !important;
+                background: black;
+            }
+            #Menu {
+                position: fixed;
+                bottom: 10px;
+                left: 10px;
+                background-color: rgba(29, 29, 29, 0.753);
+                border-radius: 15px;
+                padding: 5px;
+                z-index: 99999;
+                user-select: none;
+                transition: opacity 0.3s;
+            }
+            .buttonForMenu {
+                color: rgb(224, 224, 224);
+                transition: color 0.3s;
+                margin: 5px;
+                user-select: none;
+                cursor: default;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+            }
+            .buttonForMenu:hover {
+                color: #9a9a9a;
+            }
+            .hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+        </style>
+        </head>
+        <body>
+            <div id="gameContainer">
+                <iframe src="${url}" id="game" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+            </div>
+            
+            <div id="Menu">
+                <span class="material-icons buttonForMenu" onclick="location.reload()">arrow_back</span>
+                <span class="material-icons buttonForMenu" id="fullscreenBtn">fullscreen</span>
+            </div>
+
+            <script>
+                var isFullscreen = false;
+                var gameContainer = document.getElementById('gameContainer');
+                var game = document.getElementById('game');
+                var menu = document.getElementById('Menu');
+                var fullscreenBtn = document.getElementById('fullscreenBtn');
+
+                fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+                function toggleFullscreen() {
+                    if (!isFullscreen) {
+                        gameContainer.classList.add('fullscreen');
+                        menu.classList.add('hidden');
+                        isFullscreen = true;
+                        fullscreenBtn.textContent = 'fullscreen_exit';
+                    } else {
+                        gameContainer.classList.remove('fullscreen');
+                        menu.classList.remove('hidden');
+                        isFullscreen = false;
+                        fullscreenBtn.textContent = 'fullscreen';
+                    }
+                }
+
+                document.addEventListener('keyup', function(e) {
+                    if (e.key === 'Escape' && isFullscreen) {
+                        toggleFullscreen();
+                    }
+                });
+
+                window.onresize = function() {
+                    game.style.height = window.innerHeight + 'px';
+                };
+                
+                // Initial height set
+                game.style.height = window.innerHeight + 'px';
+            <\/script>
+        </body></html>
+    `;
+}
+        function showHome() {
+            gameClicked = null;
+            document.getElementById('gamesContainer').style.display = 'grid';
+            document.getElementById('gameView').style.display = 'none';
+        }
+
+        function toggleFullscreen() {
+            const iframe = document.getElementById('gameIframe');
+            if (iframe) {
+                if (!document.fullscreenElement) {
+                    if (iframe.requestFullscreen) {
+                        iframe.requestFullscreen();
+                    } else if (iframe.webkitRequestFullscreen) {
+                        iframe.webkitRequestFullscreen();
+                    } else if (iframe.mozRequestFullScreen) {
+                        iframe.mozRequestFullScreen();
+                    } else if (iframe.msRequestFullscreen) {
+                        iframe.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                }
+            }
         }
 
         function filterByCategory(category) {
