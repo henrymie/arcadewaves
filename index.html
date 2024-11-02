@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>arcadewaves.games</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <style>
         body {
@@ -49,7 +51,7 @@
         }
 
         .search-bar {
-            width: 100%;
+            width: 82%;
             padding: 10px 15px;
             padding-right: 40px;
             border-radius: 8px;
@@ -66,7 +68,7 @@
 
         .search-icon {
             position: absolute;
-            right: 12px;
+            right: 25px;
             top: 50%;
             transform: translateY(-50%);
             opacity: 0.5;
@@ -104,7 +106,7 @@
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 21px;
         }
         
         .games-grid {
@@ -121,6 +123,9 @@
             cursor: pointer;
             position: relative;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            aspect-ratio: 3/3;
+            display: flex;
+            flex-direction: column;
         }
         
         .game-card:hover {
@@ -129,64 +134,25 @@
         
         .game-icon {
             width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            background: linear-gradient(45deg, #3a3a3a, #2a2a2a);
+            height: 180%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            flex-grow: 1;
         }
         
         .game-title {
-            padding: 12px;
+            padding: 6px;
             text-align: center;
             font-size: 14px;
             background: #2a2a2a;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-
-        .game-view {
-            display: none;
-            width: 100%;
-            height: calc(100vh - 140px);
-            margin: 0 auto;
-        }
-
-        .game-frame {
-            width: 100%;
-            height: 100%;
-            background: #2a2a2a;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .game-frame iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .game-controls {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
+            height: 25%;
             display: flex;
-            gap: 10px;
-        }
-
-        .control-btn {
-            background: rgba(42, 42, 42, 0.8);
-            border: none;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .control-btn:hover {
-            background: rgba(58, 58, 58, 0.8);
+            align-items: center;
+            justify-content: center;
         }
 
         @media (max-width: 768px) {
@@ -223,81 +189,73 @@
 
     <main class="main-content">
         <div class="games-grid" id="gamesContainer"></div>
-        <div class="game-view" id="gameView">
-            <div class="game-frame" id="gameFrame"></div>
-            <div class="game-controls">
-                <button class="control-btn" onclick="showHome()">Back</button>
-                <button class="control-btn" onclick="toggleFullscreen()">Fullscreen</button>
-            </div>
-        </div>
     </main>
 
     <script>
         const games = [
-            { title: "Only Up Ball", icon: "#", url: "/a", category: "Parkour" },
-            { title: "Minecraft Parkour", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/9ecda005-11e9-4b52-ab9e-700b4d46d00f%2Fminep.xml&container=ig", category: "Parkour" },
-            { title: "Stack Bounce", icon: "", url: "https://stackbounce.h5games.usercontent.goog/v/1aqsvv0aegbjg/?origin=https%3A%2F%2Fgamesnacks.com&gameCenterId=yt&userActivityMetrics=true&eids=95340509&features=InterstitialFreqCap__freq_cap_60s%2CInterstitialFreqCap__block_pga_1m_interstitials%2CMonetization__populate_google_global_correlator%2CMonetization__use_ppabg_tag", category: "Strategy" },
-            { title: "Johnny Trigger", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/yrgen73/Jtrigger@3d4eb8d328bab8af057daa77acd4cee7608f1ec1/jt.xml&container=ig", category: "Strategy" },
-            { title: "Basketball Legends", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@5ebf5ebca88beaad3f3e9dcf461e25778c2a1a56/build/bl20/bl2020.xml&container=ig", category: "Strategy" }, 
-            { title: "OvO", icon: "", url: "https://75jfh73gd9hla64g-opensocial.googleusercontent.com/gadgets/ifr?url=https://googleusercontent.b-cdn.net/ovo/ovo.xml&container=ig", category: "Strategy" },      
-            { title: "Snow Rider 3D", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/mind4ur/debugactions@6e97a528bfcdd0623e0cd99ad352baebf47a6b70/sr3d2.xml&container=ig", category: "Strategy" },  
-            { title: "Gun Spin", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/RobiFet/workflow@60b41ef8c9123ae41b86bf04c9b39e1a5713aaa9/bin/gs.xml&container=ig", category: "Shooter" },    
-            { title: "Time Shooter 2", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/ts2x.xml&container=ig", category: "Shooter" },      
-            { title: "Time Shooter 3", icon: "", url: "https://google-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@0d8fb9c7430567ed0900902593eee6ba2ba8d297/ts3.xml&container=ig", category: "Shooter" },  
-            { title: "Basket Random", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/newgoogletrendd.xml&container=ig", category: "Strategy" },  
-            { title: "Rooftop Snipers", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@f8de953e5d955baef80e3994a1105d74ad76315b/Rooftop-Snipers.xml&container=ig", category: "Shooter" },  
-            { title: "Temple Run", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bessiegasbarro/Temp@8b49fbc206a1a207d613b8ca4d4f0b767159657d/tr.xml&container=ig", category: "Strategy" },    
-            { title: "Hole.io", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/gertdoro/Toolkit@93a27eabbbe5eb626af5b9b7dd0926ac16810a41/Code/Java/hole.xml&container=ig", category: "Strategy" },  
-            { title: "Snake", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://26515722-282596139816136697.preview.editmysite.com/uploads/b/7547235-562404422326578714/files/sis.xml&container=ig", category: "Strategy" }, 
-            { title: "Getaway Shootout", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@e14f9d7fa2d076a4845a22c5b0e566f7cfd0ac4b/Getaway-Shootout.xml&container=ig", category: "Shooter" }, 
-            { title: "Funny Shooter 2", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/wergboy/Meteor@8f6f4282e1304fa03b4ea2cdb326184b11655a90/examples/react-in-blaze/fs2.xml&container=ig", category: "Shooter" },     
-            { title: "Helix Jump", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/h4643.xml&container=ig", category: "Strategy" },   
-            { title: "Vex 5", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@dae52f4583f3cc7612451ea7f02965aeff6077bf/build/v5/v5.xml&container=ig", category: "Strategy" }, 
-            { title: "Stick Archers Battle", icon: "", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://39574824-594760418439461653.preview.editmysite.com/uploads/b/139890129-634516224366849044/files/sab.xml&container=ig", category: "Strategy" },     
-            { title: "Cookie Clicker", icon: "", url: "https://google-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@0d9afabd2522344a702e1b692ad58039f6290b0d/build/c-c/cc.xml&container=ig", category: "Strategy" },    
-            { title: "Epic Stunt Cars", icon: "#", url: "/d", category: "Driving" },
-            { title: "Tap Tap Shots", icon: "#", url: "/e", category: "Strategy" },     
-            { title: "2048", icon: "#", url: "/2048", category: "Strategy" },   
-            { title: "Chrome Dino", icon: "#", url: "/chrome-dino", category: "Strategy" }, 
-            { title: "Doodle Jump", icon: "#", url: "/doodle-jump", category: "Strategy" },
-            { title: "FNAF 4", icon: "#", url: "/FNAF4", category: "Strategy" },
-            { title: "Fruit Ninja", icon: "#", url: "/fruitninja", category: "Strategy" },
-            { title: "Geometry Dash", icon: "#", url: "/geometry-dash", category: "Strategy" },
-            { title: "Jetpack Joyride", icon: "#", url: "/jetpack-joyride", category: "Strategy" },
-            { title: "Minecraft", icon: "#", url: "/minecraft-18", category: "Strategy" },
-            { title: "Moto X3M", icon: "#", url: "/Moto-X3M", category: "Strategy" },
-            { title: "Paper IO 2", icon: "#", url: "/paperio2", category: "Strategy" },
-            { title: "Slope", icon: "#", url: "/slope", category: "Strategy" },
-            { title: "Slope 2", icon: "#", url: "/slope-2", category: "Strategy" },
-            { title: "Soundboard", icon: "#", url: "/soundboard", category: "Strategy" },
-            { title: "Stack", icon: "#", url: "/stack", category: "Strategy" },
-            { title: "Stickman Hook", icon: "#", url: "/stickman-hook", category: "Strategy" },
-            { title: "Subway Surfers", icon: "#", url: "/subwaysurfers-sf", category: "Strategy" },
-            { title: "Temple Run 2", icon: "#", url: "/temple-run-2", category: "Strategy" },
-            { title: "Crossy Road", icon: "#", url: "/crossyroad", category: "Strategy" },
-            { title: "Cut The Rope", icon: "#", url: "/cuttherope-Timetravel", category: "Strategy" },
-            { title: "BitLife", icon: "#", url: "/bitlife", category: "Strategy" },
-            { title: "Bottle Flip 3D", icon: "#", url: "/bottle-flip-3d", category: "Strategy" },
-            { title: "Ball Hop", icon: "#", url: "/Ball-Hop", category: "Strategy" },
-            { title: "Backrooms", icon: "#", url: "/backrooms", category: "Strategy" },
-            { title: "Angry Birds", icon: "#", url: "/angrybirds", category: "Strategy" },
-            { title: "Rocket League", icon: "#", url: "/Rocket-League", category: "Strategy" },
-            { title: "Tactical Assasin 2", icon: "#", url: "/tacticalassasin2", category: "Strategy" },
-            { title: "Space Waves", icon: "#", url: "https://crazygames.cdn.start.gg/9nm5764dbppg/v3/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
-            { title: "Shoot The Bottle", icon: "#", url: "https://marketjs.cdn.start.gg/9pb62x276fpp/v4/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Shooter" },
-            { title: "Wild Hunting Clash", icon: "#", url: "https://inlogic.cdn.start.gg/9n292xr2128r/v3/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Shooter" },
-            { title: "Ball Drop", icon: "#", url: "https://marketjs.cdn.start.gg/9n5cr504q14r/v6/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
-            { title: "Color Sort Puzzle", icon: "#", url: "https://inlogic.cdn.start.gg/9nk7ht6xf3hm/v1/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
-            { title: "Drift Boss", icon: "#", url: "https://marketjs.cdn.start.gg/9p4mrh7g580x/v11/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
-            { title: "Cubes 2048", icon: "#", url: "https://crazygames.cdn.start.gg/9mvd9sprhm6x/v67/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
-            { title: "Snowdown Showdown", icon: "#", url: "https://educate.stemfuse.com/sf-serve/76/snowdown_showdown/index.html?class_id=&course_id=&active=", category: "Strategy" },
-            { title: "Elastic Man", icon: "#", url: "https://d21u3ic0kp9e91.cloudfront.net/elasticman/0/index.html", category: "Strategy" },
+            { title: "Only Up Ball", icon: "https://images.twoplayergames.org/files/games/g1/only-up-balls/only-up-balls.jpg", url: "/a", category: "Parkour" },
+            { title: "Minecraft Parkour", icon: "https://i.ytimg.com/vi/2v0z3UNbVjs/hqdefault.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://s3.amazonaws.com/production-assetsbucket-8ljvyr1xczmb/9ecda005-11e9-4b52-ab9e-700b4d46d00f%2Fminep.xml&container=ig", category: "Parkour" },
+            { title: "Stack Bounce", icon: "https://images.sftcdn.net/images/t_app-icon-m/p/686953f5-3c56-4c54-8294-a2ac86d06062/3840619291/stack-bounce-2024-logo", url: "https://stackbounce.h5games.usercontent.goog/v/1aqsvv0aegbjg/?origin=https%3A%2F%2Fgamesnacks.com&gameCenterId=yt&userActivityMetrics=true&eids=95340509&features=InterstitialFreqCap__freq_cap_60s%2CInterstitialFreqCap__block_pga_1m_interstitials%2CMonetization__populate_google_global_correlator%2CMonetization__use_ppabg_tag", category: "Strategy" },
+            { title: "Johnny Trigger", icon: "https://play-lh.googleusercontent.com/pEH-pYG8v1WmNjk3haRt6bR4b6pUpvDsQLtVB-xsxt-SR9O6cX6OxnM0him5joRq8A", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/yrgen73/Jtrigger@3d4eb8d328bab8af057daa77acd4cee7608f1ec1/jt.xml&container=ig", category: "Strategy" },
+            { title: "Basketball Legends", icon: "/basketballlegends.png", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@5ebf5ebca88beaad3f3e9dcf461e25778c2a1a56/build/bl20/bl2020.xml&container=ig", category: "Strategy" }, 
+            { title: "OvO", icon: "https://www.yoosfuhl.com/wp-content/uploads/2024/05/OvO-Game-YoosFuhl.jpg", url: "https://75jfh73gd9hla64g-opensocial.googleusercontent.com/gadgets/ifr?url=https://googleusercontent.b-cdn.net/ovo/ovo.xml&container=ig", category: "Strategy" },      
+            { title: "Snow Rider 3D", icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQynPGvHdj-dZZlnX3ZqLh7NTBB85b0FHWjBA&s", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/mind4ur/debugactions@6e97a528bfcdd0623e0cd99ad352baebf47a6b70/sr3d2.xml&container=ig", category: "Strategy" },  
+            { title: "Gun Spin", icon: "https://play-lh.googleusercontent.com/fLqvWSVq5rENEvu32xl0hf96wwSHVwQm-_9xc6KZg9Vgv9PbAtf1CyBYW7i1mlAXoSA", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/RobiFet/workflow@60b41ef8c9123ae41b86bf04c9b39e1a5713aaa9/bin/gs.xml&container=ig", category: "Shooter" },    
+            { title: "Time Shooter 2", icon: "/timeshooter2.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/ts2x.xml&container=ig", category: "Shooter" },      
+            { title: "Time Shooter 3", icon: "/time-shooter-3-swat.jpeg", url: "https://google-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@0d8fb9c7430567ed0900902593eee6ba2ba8d297/ts3.xml&container=ig", category: "Shooter" },  
+            { title: "Basket Random", icon: "https://play-lh.googleusercontent.com/gP8T5Z1O-ngxIloiwcBZzrzyLPYDp0R_1BDNKUDZboIRPVImeyWI8-7aExvB9gAGNKc", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/newgoogletrendd.xml&container=ig", category: "Strategy" },  
+            { title: "Rooftop Snipers", icon: "/rooftop-snipers.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@f8de953e5d955baef80e3994a1105d74ad76315b/Rooftop-Snipers.xml&container=ig", category: "Shooter" },  
+            { title: "Temple Run", icon: "/temple-run-2-2021-07-20.png", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bessiegasbarro/Temp@8b49fbc206a1a207d613b8ca4d4f0b767159657d/tr.xml&container=ig", category: "Strategy" },    
+            { title: "Hole.io", icon: "/Hole-Io.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/gertdoro/Toolkit@93a27eabbbe5eb626af5b9b7dd0926ac16810a41/Code/Java/hole.xml&container=ig", category: "Strategy" },  
+            { title: "Snake", icon: "/slither.io-logo-m240x240.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://26515722-282596139816136697.preview.editmysite.com/uploads/b/7547235-562404422326578714/files/sis.xml&container=ig", category: "Strategy" }, 
+            { title: "Getaway Shootout", icon: "/934bde36-a4a1-43d0-8b35-30f15feddbb4.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1bx/version@e14f9d7fa2d076a4845a22c5b0e566f7cfd0ac4b/Getaway-Shootout.xml&container=ig", category: "Shooter" }, 
+            { title: "Funny Shooter 2", icon: "/OIP.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/wergboy/Meteor@8f6f4282e1304fa03b4ea2cdb326184b11655a90/examples/react-in-blaze/fs2.xml&container=ig", category: "Shooter" },     
+            { title: "Helix Jump", icon: "/helixjump.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/classroom-google-new/google.net@main/h4643.xml&container=ig", category: "Strategy" },   
+            { title: "Vex 5", icon: "/vex5.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@dae52f4583f3cc7612451ea7f02965aeff6077bf/build/v5/v5.xml&container=ig", category: "Strategy" }, 
+            { title: "Stick Archers Battle", icon: "/stickarchersbattle.jpg", url: "https://images-opensocial.googleusercontent.com/gadgets/ifr?url=https://39574824-594760418439461653.preview.editmysite.com/uploads/b/139890129-634516224366849044/files/sab.xml&container=ig", category: "Strategy" },     
+            { title: "Cookie Clicker", icon: "https://images-na.ssl-images-amazon.com/images/I/71VSpLvjtaL.png", url: "https://google-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/bobydob/JSEngine@0d9afabd2522344a702e1b692ad58039f6290b0d/build/c-c/cc.xml&container=ig", category: "Strategy" },    
+            { title: "Epic Stunt Cars", icon: "/eb638126e29ebcde841d87cbf3af1b95.jpg", url: "/d", category: "Driving" },
+            { title: "Tap Tap Shots", icon: "/c9f8l1mrsfel79479ngg.png", url: "/e", category: "Strategy" },     
+            { title: "2048", icon: "/2048.jpg", url: "/2048", category: "Strategy" },   
+            { title: "Chrome Dino", icon: "/Chrome_Dino.webp", url: "/chrome-dino", category: "Strategy" }, 
+            { title: "Doodle Jump", icon: "https://images-eu.ssl-images-amazon.com/images/I/51mrB6jG8pL.png", url: "/doodle-jump", category: "Strategy" },
+            { title: "FNAF 4", icon: "/fnaf4.jpg", url: "/FNAF4", category: "Strategy" },
+            { title: "Fruit Ninja", icon: "/fruitninja.jpg", url: "/fruitninja", category: "Strategy" },
+            { title: "Geometry Dash", icon: "/Geometry_Dash_Artwork_1.jpg", url: "/geometry-dash", category: "Strategy" },
+            { title: "Jetpack Joyride", icon: "/jetpackjoyride.jpg", url: "/jetpack-joyride", category: "Strategy" },
+            { title: "Minecraft", icon: "/minecraft-1024x1024.jpg", url: "/minecraft-18", category: "Strategy" },
+            { title: "Moto X3M", icon: "/moto-x3m.jpg", url: "/Moto-X3M", category: "Strategy" },
+            { title: "Paper IO 2", icon: "/paperio2.jpg", url: "/paperio2", category: "Strategy" },
+            { title: "Slope", icon: "/slope.jpg", url: "/slope", category: "Strategy" },
+            { title: "Slope 2", icon: "/slope2.webp", url: "/slope-2", category: "Strategy" },
+            { title: "Soundboard", icon: "https://i.ibb.co/pXRs8Kn/button-pressed.webp", url: "/soundboard", category: "Strategy" },
+            { title: "Stack", icon: "/stack.jpg", url: "/stack", category: "Strategy" },
+            { title: "Stickman Hook", icon: "/stickmanhook.jpg", url: "/stickman-hook", category: "Strategy" },
+            { title: "Subway Surfers", icon: "/subwaysurfers.jpg", url: "/subwaysurfers-sf", category: "Strategy" },
+            { title: "Temple Run 2", icon: "/templerun2.png", url: "/temple-run-2", category: "Strategy" },
+            { title: "Crossy Road", icon: "/crossyroad.jpg", url: "/crossyroad", category: "Strategy" },
+            { title: "Cut The Rope", icon: "/cuttherope.webp", url: "/cuttherope-Timetravel", category: "Strategy" },
+            { title: "BitLife", icon: "/bitlife.jpg", url: "/bitlife", category: "Strategy" },
+            { title: "Bottle Flip 3D", icon: "/bottle-flip-3d-game-icon.jpg", url: "/bottle-flip-3d", category: "Strategy" },
+            { title: "Ball Hop", icon: "https://play-lh.googleusercontent.com/hZzqGtfWTqIdrOCB1nklmYHyMVN24ILeAYvINHQj0KBlCZ6lM139lPVvHVhI2OuMXEE", url: "/Ball-Hop", category: "Strategy" },
+            { title: "Backrooms", icon: "/35j5d80.png", url: "/backrooms", category: "Strategy" },
+            { title: "Angry Birds", icon: "/156667861687778904.png", url: "/angrybirds", category: "Strategy" },
+            { title: "Rocket League", icon: "/rocketleague.jpg", url: "/Rocket-League", category: "Strategy" },
+            { title: "Tactical Assasin 2", icon: "/tacassasin2.jpg", url: "/tacticalassasin2", category: "Strategy" },
+            { title: "Space Waves", icon: "/space-waves_16x9-cover.jpg", url: "https://crazygames.cdn.start.gg/9nm5764dbppg/v3/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Shoot The Bottle", icon: "https://play-lh.googleusercontent.com/fwaR2z3XQqIiC1qzI6nfhTPq22WJukwgwddXducFF7rgGXmiY4vPb_P3un0b3KePdg", url: "https://marketjs.cdn.start.gg/9pb62x276fpp/v4/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Shooter" },
+            { title: "Wild Hunting Clash", icon: "/wildhuntingclash.jpg", url: "https://inlogic.cdn.start.gg/9n292xr2128r/v3/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Shooter" },
+            { title: "Ball Drop", icon: "https://thaka.bing.com/th?id=OCGE.9n5cr504q14r_v6_main_webp&w=124&h=124&qlt=80&c=0&rs=1", url: "https://marketjs.cdn.start.gg/9n5cr504q14r/v6/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Color Sort Puzzle", icon: "https://thaka.bing.com/th?id=OCGE.9nk7ht6xf3hm_v3_main_webp&w=124&h=124&qlt=80&c=0&rs=1", url: "https://inlogic.cdn.start.gg/9nk7ht6xf3hm/v1/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Drift Boss", icon: "https://thaka.bing.com/th?id=OCGE.9p4mrh7g580x_v8_main_webp&w=124&h=124&qlt=80&c=0&rs=1", url: "https://marketjs.cdn.start.gg/9p4mrh7g580x/v11/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Cubes 2048", icon: "https://thaka.bing.com/th?id=OCGE.9mvd9sprhm6x_v5_main_webp&w=124&h=124&qlt=80&c=0&rs=1", url: "https://crazygames.cdn.start.gg/9mvd9sprhm6x/v67/index.html?msstart_sdk_init=eyJwYXJlbnRPcmlnaW4iOiJodHRwczovL3d3dy5tc24uY29tIiwiY2xpZW50SWQiOiIwRjAzREI4OEYwQ0Y2MUM0MENFQUNFQUFGMTU2NjBEMyIsImxvY2FsZSI6ImVuLXVzIiwiZW50cnlQb2ludElkIjoiIn0", category: "Strategy" },
+            { title: "Snowdown Showdown", icon: "https://educate.stemfuse.com/sites/default/files/styles/arcade_game_listing/public/mainimage/images/start_screen.png?itok=qMOA0uxC", url: "https://educate.stemfuse.com/sf-serve/76/snowdown_showdown/index.html?class_id=&course_id=&active=", category: "Strategy" },
+            { title: "Elastic Man", icon: "/elastic-man-logo.png", url: "https://d21u3ic0kp9e91.cloudfront.net/elasticman/0/index.html", category: "Strategy" },
+            { title: "Google Feud", icon: "https://i.ytimg.com/vi/RnEReMXCD_I/maxresdefault.jpg", url: "/google-feud", category: "Strategy" }         
         ];
-
         const categories = ['all', ...new Set(games.map(game => game.category))];
         let activeCategory = 'all';
         let searchTerm = '';
-        let gameClicked = null;
 
         function renderCategories() {
             const container = document.getElementById('categoriesContainer');
@@ -322,150 +280,86 @@
             const filteredGames = filterGames();
             container.innerHTML = filteredGames.map(game => `
                 <div class="game-card" onclick="showGame('${game.url}')">
-                    <div class="game-icon"></div>
+                    <div class="game-icon" style="background-image: url('${game.icon}')"></div>
                     <div class="game-title">${game.title}</div>
                 </div>
             `).join('');
         }
 
-function showGame(url) {
-    document.documentElement.innerHTML = `
-        <html><head>
-        <script src="https://unpkg.com/@ruffle-rs/ruffle"><\/script>
-        <title>Arcade - Game</title>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            body {
-                margin: 0;
-                overflow: hidden;
-                background-color: rgb(117, 117, 117);
-            }
-            #gameContainer {
-                width: 100vw;
-                height: 100vh;
-                position: relative;
-            }
-            #game {
-                width: 100%;
-                height: 100%;
-                border: none;
-                display: block;
-            }
-            #Menu {
-                position: fixed;
-                bottom: 10px;
-                left: 10px;
-                background-color: rgba(29, 29, 29, 0.753);
-                border-radius: 15px;
-                padding: 5px;
-                z-index: 9999;
-                user-select: none;
-                transition: opacity 0.3s;
-            }
-            .buttonForMenu {
-                color: rgb(224, 224, 224);
-                transition: color 0.3s;
-                margin: 5px;
-                user-select: none;
-                cursor: default !important;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-            }
-            .buttonForMenu:hover {
-                color: #9a9a9a;
-                cursor: default !important;
-            }
-            .hidden {
-                opacity: 0;
-                pointer-events: none;
-            }
-        </style>
-        </head>
-        <body>
-            <div id="gameContainer">
-                <iframe src="${url}" id="game" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-            </div>
-            
-            <div id="Menu">
-                <span class="material-icons buttonForMenu" onclick="location.reload()">arrow_back</span>
-                <span class="material-icons buttonForMenu" onclick="simulateF11()">fullscreen</span>
-            </div>
-
-            <script>
-                var game = document.getElementById('game');
-                var menu = document.getElementById('Menu');
-                var isFullscreen = false;
-
-                function simulateF11() {
-                    var event = new KeyboardEvent('keydown', {
-                        key: 'F11',
-                        keyCode: 122,
-                        which: 122,
-                        code: 'F11',
-                        bubbles: true
-                    });
-                    document.dispatchEvent(event);
+        function showGame(url) {
+            document.documentElement.innerHTML = `
+                <html><head>
+                <script src="https://unpkg.com/@ruffle-rs/ruffle"><\/script>
+                <title>Arcade - Game</title>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <style>
+                    body {
+                        margin: 0;
+                        overflow: hidden;
+                        background-color: rgb(117, 117, 117);
+                    }
+                    #gameContainer {
+                        width: 100vw;
+                        height: 100vh;
+                    }
+                    #game {
+                        width: 100%;
+                        height: 100%;
+                        border: none;
+                    }
+                    #Menu {
+                        position: fixed;
+                        bottom: 10px;
+                        left: 10px;
+                        background-color: rgba(29, 29, 29, 0.753);
+                        border-radius: 15px;
+                        padding: 5px;
+                        z-index: 9999;
+                        user-select: none;
+                        -webkit-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                    }
+                    .buttonForMenu {
+                        color: rgb(224, 224, 224);
+                        margin: 5px;
+                        cursor: default;
+                        user-select: none;
+                        -webkit-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                    }
+                    .buttonForMenu:hover {
+                        color: #9a9a9a;
+                    }
+                    :fullscreen #Menu {
+                        display: none;
+                    }
+                    :-webkit-full-screen #Menu {
+                        display: none;
+                    }
+                    :-moz-full-screen #Menu {
+                        display: none;
+                    }
+                </style>
+                </head>
+                <body>
+                    <div id="gameContainer">
+                        <iframe src="${url}" id="game" allowfullscreen></iframe>
+                    </div>
                     
-                    if (!isFullscreen) {
-                        menu.classList.add('hidden');
-                        isFullscreen = true;
-                    } else {
-                        menu.classList.remove('hidden');
-                        isFullscreen = false;
-                    }
-                }
-
-                document.addEventListener('keyup', function(e) {
-                    if (e.key === 'Escape' && isFullscreen) {
-                        menu.classList.remove('hidden');
-                        isFullscreen = false;
-                    }
-                });
-
-                window.onresize = function() {
-                    game.style.height = window.innerHeight + 'px';
-                };
-                
-                // Initial height set
-                game.style.height = window.innerHeight + 'px';
-            <\/script>
-        </body></html>
-    `;
-}
-        function showHome() {
-            gameClicked = null;
-            document.getElementById('gamesContainer').style.display = 'grid';
-            document.getElementById('gameView').style.display = 'none';
+                    <div id="Menu">
+                        <span class="material-icons buttonForMenu" onclick="location.reload()">arrow_back</span>
+                        <span class="material-icons buttonForMenu" onclick="document.documentElement.requestFullscreen()">fullscreen</span>
+                    </div>
+                </body></html>
+            `;
         }
 
-        function toggleFullscreen() {
-            const iframe = document.getElementById('gameIframe');
-            if (iframe) {
-                if (!document.fullscreenElement) {
-                    if (iframe.requestFullscreen) {
-                        iframe.requestFullscreen();
-                    } else if (iframe.webkitRequestFullscreen) {
-                        iframe.webkitRequestFullscreen();
-                    } else if (iframe.mozRequestFullScreen) {
-                        iframe.mozRequestFullScreen();
-                    } else if (iframe.msRequestFullscreen) {
-                        iframe.msRequestFullscreen();
-                    }
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                }
-            }
+        function showHome() {
+            location.reload();
         }
 
         function filterByCategory(category) {
